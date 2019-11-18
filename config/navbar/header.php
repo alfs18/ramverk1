@@ -52,6 +52,30 @@ return [
             "text" => "Kolla ip",
             "url" => "ip-check",
             "title" => "Kolla ip.",
+            "submenu" => [
+                "items" => [
+                    [
+                        "text" => "Kolla ip v1",
+                        "url" => "check-ip/page",
+                        "title" => "Kolla ip version 1.",
+                    ],
+                    [
+                        "text" => "Info om ip v1",
+                        "url" => "rest-api/json",
+                        "title" => "Info om ip version 1.",
+                    ],
+                    [
+                        "text" => "Kolla ip v2",
+                        "url" => "check2/page",
+                        "title" => "Kolla ip version 2.",
+                    ],
+                    [
+                        "text" => "Info om ip v2",
+                        "url" => "restapi2/json",
+                        "title" => "Info om ip version 2.",
+                    ],
+                ],
+            ],
         ],
     ],
 ];
