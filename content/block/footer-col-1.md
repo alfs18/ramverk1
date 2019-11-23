@@ -1,3 +1,3 @@
-#### Footer col 1
+#### Info om hemsidan
 
-Med brödtext i ett stycke som säger något trevligt om just detta block, eller kanske en lista av länkar.
+Om du vill veta mer om den här sidan kan du gå [hit](om).

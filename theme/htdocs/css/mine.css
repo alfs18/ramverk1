@@ -7000,6 +7000,15 @@ code {
 .toc .selected a:visited {
   color: #fff;
 }
+.footer-column a,
+.footer-column a:visited {
+  color: #c0d2a0;
+  text-decoration: underline;
+}
+.footer-column a:hover {
+  color: #1b2705;
+  text-decoration: none;
+}
 .site-footer {
   color: #c0d2a0;
 }

@@ -1,3 +1,3 @@
-#### Footer col 3
+#### Lek med IP-adresser
 
-Med brödtext i ett stycke som säger något trevligt om just detta block, eller kanske en lista av länkar.
+Om du vill testa olika IP-adresser och se om de finns och var, så finns det några olika varianter [här](ip-check).
