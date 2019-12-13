@@ -78,7 +78,9 @@ class RestApiController implements ContainerInjectableInterface
 
         $page->add("rest-api/start", $data);
 
-        return $page->render();
+        return $page->render([
+            "title" => $title,
+        ]);
     }
 
 
@@ -131,7 +133,6 @@ class RestApiController implements ContainerInjectableInterface
         $title = "Info om ip";
 
         $data = [
-            "title" => $title,
             "ip" => "172.217.11.23",
             "result" => "Giltig IP-adress.",
             "domain" => "lga25s60-in-f23.1e100.net"
@@ -139,7 +140,9 @@ class RestApiController implements ContainerInjectableInterface
 
         $page->add("rest-api/ex1", $data);
 
-        return $page->render();
+        return $page->render([
+            "title" => $title,
+        ]);
     }
 
 
@@ -155,7 +158,6 @@ class RestApiController implements ContainerInjectableInterface
         $title = "Info om ip";
 
         $data = [
-            "title" => $title,
             "ip" => "192.168.0.1",
             "result" => "Giltig IP-adress.",
             "domain" => "192.168.0.1"
@@ -163,6 +165,8 @@ class RestApiController implements ContainerInjectableInterface
 
         $page->add("rest-api/ex1", $data);
 
-        return $page->render();
+        return $page->render([
+            "title" => $title,
+        ]);
     }
 }

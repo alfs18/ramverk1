@@ -48,10 +48,10 @@ class CheckIp2
     public function getCurl()
     {
         // Set API access key
-        $accessKey = implode("", require(ANAX_INSTALL_PATH . "/config/api_key.php"));
+        $accessKey = require(ANAX_INSTALL_PATH . "/config/api_key.php");
 
         // Initialize CURL
-        $chandle = curl_init('http://api.ipstack.com/'.$this->ipadr.'?access_key='.$accessKey.'');
+        $chandle = curl_init('http://api.ipstack.com/'.$this->ipadr.'?access_key='.$accessKey["api_key"].'');
         curl_setopt($chandle, CURLOPT_RETURNTRANSFER, true);
 
         // Store the data

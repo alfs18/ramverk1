@@ -79,13 +79,14 @@ class CheckIpController2 implements ContainerInjectableInterface
         $userIp = $ipCheck->getUserIp($getAddr);
 
         $data = [
-            "title" => $title,
             "userIp" => $userIp
         ];
 
         $page->add("check-ip/start2", $data);
 
-        return $page->render();
+        return $page->render([
+            "title" => $title,
+        ]);
     }
 
     /**
@@ -111,12 +112,13 @@ class CheckIpController2 implements ContainerInjectableInterface
         $apiResult = $apiReq->getCurl();
 
         $data = [
-            "title" => $title,
             "res" => $apiResult
         ];
 
         $page->add("check-ip/end2", $data);
 
-        return $page->render();
+        return $page->render([
+            "title" => $title,
+        ]);
     }
 }

@@ -77,13 +77,14 @@ class RestApiController2 implements ContainerInjectableInterface
         $userIp = $ipCheck->getUserIp($request->getServer("REMOTE_ADDR"));
 
         $data = [
-            "title" => $title,
             "userIp" => $userIp
         ];
 
         $page->add("rest-api/start2", $data);
 
-        return $page->render();
+        return $page->render([
+            "title" => $title,
+        ]);
     }
 
 
@@ -132,13 +133,14 @@ class RestApiController2 implements ContainerInjectableInterface
         $apiResult = $apiReq->getCurl();
 
         $data = [
-            "title" => $title,
             "result" => json_encode($apiResult, JSON_PRETTY_PRINT) . "\n",
         ];
 
         $page->add("rest-api/ex3", $data);
 
-        return $page->render();
+        return $page->render([
+            "title" => $title,
+        ]);
     }
 
 
@@ -161,12 +163,13 @@ class RestApiController2 implements ContainerInjectableInterface
         $apiResult = $apiReq->getCurl();
 
         $data = [
-            "title" => $title,
             "result" => json_encode($apiResult, JSON_PRETTY_PRINT) . "\n",
         ];
 
         $page->add("rest-api/ex3", $data);
 
-        return $page->render();
+        return $page->render([
+            "title" => $title,
+        ]);
     }
 }

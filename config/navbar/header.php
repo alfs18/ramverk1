@@ -30,6 +30,11 @@ return [
                         "url" => "redovisning/kmom02",
                         "title" => "Redovisning för kmom02.",
                     ],
+                    [
+                        "text" => "Kmom03",
+                        "url" => "redovisning/kmom03",
+                        "title" => "Redovisning för kmom03.",
+                    ],
                 ],
             ],
         ],
@@ -73,6 +78,25 @@ return [
                         "text" => "Info om ip v2",
                         "url" => "restapi2/json",
                         "title" => "Info om ip version 2.",
+                    ],
+                ],
+            ],
+        ],
+        [
+            "text" => "Kolla vädret",
+            "url" => "weather-check",
+            "title" => "Kolla väderprognoser.",
+            "submenu" => [
+                "items" => [
+                    [
+                        "text" => "Kolla vädret",
+                        "url" => "check-weather/",
+                        "title" => "Kolla väderprognoser.",
+                    ],
+                    [
+                        "text" => "REST API",
+                        "url" => "rest-weather/",
+                        "title" => "Kolla väderprognoser.",
                     ],
                 ],
             ],

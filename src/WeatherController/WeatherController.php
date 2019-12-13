@@ -1,6 +1,6 @@
 <?php
 
-namespace Anax\Controller;
+namespace Anax\WeatherController;
 
 use Anax\Commons\ContainerInjectableInterface;
 use Anax\Commons\ContainerInjectableTrait;
@@ -18,7 +18,7 @@ use Anax\Commons\ContainerInjectableTrait;
  *
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
-class CheckIpController implements ContainerInjectableInterface
+class WeatherController implements ContainerInjectableInterface
 {
     use ContainerInjectableTrait;
 
@@ -42,6 +42,7 @@ class CheckIpController implements ContainerInjectableInterface
     {
         // Use to initialise member variables.
         $this->db = "active";
+        $this->di->set("dates", "\Anax\WeatherController\Dates");
     }
 
 
@@ -54,77 +55,87 @@ class CheckIpController implements ContainerInjectableInterface
      *
      * @return string
      */
-    public function indexAction() : string
-    {
-        // Deal with the action and return a response.
-        return __METHOD__ . ", \$db is {$this->db}";
-    }
-
-
-    /**
-     * Allow user to check if input is a valid ip address.
-     * GET mountpoint/page
-     *
-     * @return object
-     */
-    public function pageActionGet() : object
+    public function indexActionGet() : object
     {
         // Add content as a view and then render the page.
+        $title = "Kolla väder";
         $page = $this->di->get("page");
-        $title = "Kolla ip";
+        $request = $this->di->get("request");
+        $getAddr = $request->getServer("REMOTE_ADDR");
 
-        $data = [
-            "title" => $title,
-        ];
-
-        $page->add("check-ip/start", $data);
+        $page->add("check-weather/start");
 
         return $page->render([
             "title" => $title,
         ]);
     }
 
+
     /**
      * Get request data and check if
      * data is a valid ip address.
-     * POST mountpoint/page
+     * POST mountpoint/
      *
      * @return object
      */
-    public function pageActionPost() : object
+    public function indexActionPost() : object
     {
         $title = "Kolla ip";
 
         $request = $this->di->request;
         $page = $this->di->get("page");
 
-        $doCheck = "";
-        $host = "";
-
         // Get content from submit.
-        $ipadr = $request->getPost("check");
+        $place = $request->getPost("check");
+        $period = $request->getPost("check1");
+        $lat = "";
+        $long = "";
 
-        if (filter_var($ipadr, FILTER_VALIDATE_IP)) {
-            $doCheck = "Detta är en giltig IP-adress.";
-            $host = gethostbyaddr($ipadr);
-            $class = "valid";
-            // echo("$ipadr is a valid IP address");
+        $dates = $this->di->get("dates")->getPastDates(2);
+
+        $apiReq = new CheckWeather();
+
+        // check if input is latitude and longitude,
+        // otherwise fetch latitude and longitude from ip address
+        if (strpos($place, ",")) {
+            $places = explode(",", $place);
+            $lat = trim($places[0]);
+            $long = trim($places[1]);
         } else {
-            $doCheck = "Detta är en ogiltig IP-adress.";
-            $class = "invalid";
-            $host = "ingen";
-            // echo("$ipadr is not a valid IP address");
+            $apiReq->setIp($place);
+            $apiResult = $apiReq->getLocation();
+            if ($apiResult["type"] == null) {
+                $page->add("check-weather/end-error");
+
+                return $page->render([
+                    "title" => $title,
+                ]);
+            }
+            $lat = $apiResult["latitude"];
+            $long = $apiResult["longitude"];
+        }
+
+        $result = $apiReq->getWeather($lat, $long, $period);
+
+        if ($period == "toCome") {
+            $sum = $result["daily"]["summary"];
+        } else {
+            $sum = "";
+            $count = 0;
+            foreach($result as $res) {
+                $sum .= $dates[$count] . ": " . $res["hourly"]["summary"] . "<br>";
+                $count += 1;
+            }
         }
 
         $data = [
-            "ip" => $ipadr,
-            "result" => $doCheck,
-            "domain" => $host,
-            "class" => $class
+            "res" => $result,
+            "sum" => $sum,
+            "lat" => $lat,
+            "long" => $long
         ];
 
-        // $_SESSION["ip"] = $doCheck;
-        $page->add("check-ip/end", $data);
+        $page->add("check-weather/end", $data);
 
         return $page->render([
             "title" => $title,
