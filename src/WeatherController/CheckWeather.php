@@ -158,7 +158,7 @@ class CheckWeather
         ];
 
         // Get dates and time
-        $dates = $this->getPastDays(2);
+        $dates = $this->getPastDays(30);
         $time = date("H:i:s");
 
         // Add all curl handlers and remember them

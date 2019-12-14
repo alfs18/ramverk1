@@ -91,7 +91,7 @@ class WeatherController implements ContainerInjectableInterface
         $lat = "";
         $long = "";
 
-        $dates = $this->di->get("dates")->getPastDates(2);
+        $dates = $this->di->get("dates")->getPastDates(30);
 
         $apiReq = new CheckWeather();
 
