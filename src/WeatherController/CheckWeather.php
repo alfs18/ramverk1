@@ -80,39 +80,75 @@ class CheckWeather
      * @param string $period either toCome or past
      * @param string $result the curl response
      * @param integer $dates all dates to be shown
-     * @return string $sum the chosen summary
+     * @return array $sum the chosen summary
      */
     public function getResult($info, $period, $result, $dates) {
         if ($info == "all") {
             if ($period == "toCome") {
-                // $sum = $result;
-                $current = "Currently: " . $result["currently"]["summary"];
-                $hour = ",<br>Hourly: " . $result["hourly"]["summary"];
-                $day = ",<br>Daily: " . $result["daily"]["summary"];
-                $sum = $current . $hour . $day;
+                $sum = $result;
+
+                // $current = "Currently: " . $result["currently"]["summary"];
+                // $hour = ",<br>Hourly: " . $result["hourly"]["summary"];
+                // $day = ",<br>Daily: " . $result["daily"]["summary"];
+                // $sum = $current . $hour . $day;
             } else {
-                $sum = "";
+                $sum = [];
                 $count = 0;
                 foreach($result as $res) {
-                    $current = ": <br>Currently: " . $res["currently"]["summary"];
-                    $hour = "<br>Hourly: " . $res["hourly"]["summary"];
-                    $day = "<br>Daily: " . $res["daily"]["data"][0]["summary"];
+                    // $current = ": <br>Currently: " . $res["currently"]["summary"];
+                    // $hour = "<br>Hourly: " . $res["hourly"]["summary"];
+                    // $day = "<br>Daily: " . $res["daily"]["data"][0]["summary"];
 
-                    $sum .= $dates[$count] . $current . $hour . $day . "<br><br>";
+                    // $sum .= $dates[$count] . $current . $hour . $day . "<br><br>";
+
+                    // $sum[] = $dates[$count] . $current . $hour . $day . "<br><br>";
+                    $sum[$dates[$count]]['currently'] = $res["currently"]["summary"];
+                    $sum[$dates[$count]]['hourly'] = $res["hourly"]["summary"];
+                    $sum[$dates[$count]]['daily'] = $res["daily"]["data"][0]["summary"];
+
                     $count += 1;
                 }
             }
         } else {
             if ($period == "toCome") {
-                $sum = $result[$info]["summary"];
+                if ($info == "currently") {
+                    $sum[$info] = $result[$info];
+                    $d = $result[$info]['time'];
+                    $sum[$info]['time'] = date("Y-m-d H:i:s", $d);
+                } else {
+                    $sum[$info]['summary'] = $result[$info]["summary"];
+                    $sum[$info]['data'] = $result[$info]["data"];
+                    $count = 0;
+                    foreach ($result[$info]["data"] as $res) {
+                        $d = $res['time'];
+                        $sum[$info]['data'][$count]['time'] = date("Y-m-d H:i:s", $d);
+                        if ($info == "daily") {
+                            $d = $res['sunriseTime'];
+                            $sum[$info]['data'][$count]['sunriseTime'] = date("Y-m-d H:i:s", $d);
+                            $d = $res['sunsetTime'];
+                            $sum[$info]['data'][$count]['sunsetTime'] = date("Y-m-d H:i:s", $d);
+                        }
+                        $count += 1;
+                    }
+                }
             } else {
-                $sum = "";
+                $sum = [];
                 $count = 0;
                 foreach($result as $res) {
                     if ($info == "daily") {
-                        $sum .= $dates[$count] . ": " . $res[$info]["data"][0]["summary"]  . "<br>";
+                        // $sum .= $dates[$count] . ": " . $res[$info]["data"][0]["summary"]  . "<br>";
+                        $sum[$dates[$count]][$info] = $res[$info]["data"][0]["summary"];
+                    } elseif ($info == "currently") {
+                        $sum[$dates[$count]][$info] = $res[$info]["summary"];
                     } else {
-                        $sum .= $dates[$count] . ": " . $res[$info]["summary"] . "<br>";
+                        // $sum .= $dates[$count] . ": " . $res[$info]["summary"] . "<br>";
+                        $sum[$dates[$count]][$info]['summary'] = $res[$info]["summary"];
+                        $data = [];
+                        foreach ($res[$info]['data'] as $ans) {
+                            $sum[$dates[$count]][$info]['data']['summary'] = $ans["summary"];
+                            $sum[$dates[$count]][$info]['data']['temperature'] = $ans["temperature"] . "&deg;C";
+                        }
+                        // $sum[$dates[$count]][$info]['data'] = $data;
                     }
                     $count += 1;
                 }
