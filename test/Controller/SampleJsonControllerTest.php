@@ -5,7 +5,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test the SampleController.
  */
-class SampleControllerTest extends TestCase
+class SampleJsonControllerTest extends TestCase
 {
     /**
      * Test the route "index".
