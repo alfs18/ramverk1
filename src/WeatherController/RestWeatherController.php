@@ -38,7 +38,7 @@ class RestWeatherController implements ContainerInjectableInterface
      *
      * @return void
      */
-    public function initialize() : void
+    public function initialize(): void
     {
         // Use to initialise member variables.
         $this->db = "active";
@@ -55,7 +55,7 @@ class RestWeatherController implements ContainerInjectableInterface
      *
      * @return string
      */
-    public function indexActionGet() : object
+    public function indexActionGet(): object
     {
         // Add content as a view and then render the page.
         $title = "Kolla väder";
@@ -85,7 +85,7 @@ class RestWeatherController implements ContainerInjectableInterface
      *
      * @return object
      */
-    public function indexActionPost() : object
+    public function indexActionPost(): object
     {
         $title = "Kolla ip";
 
@@ -98,18 +98,24 @@ class RestWeatherController implements ContainerInjectableInterface
         $info = $request->getPost("check2");
         $lat = "";
         $long = "";
+        $sum;
 
-        $dates = $this->di->get("dates")->getPastDates(30);
+        // $dates = $this->di->get("dates")->getPastDates(30);
 
         $apiReq = new CheckWeather();
 
         // check if input is latitude and longitude,
         // otherwise fetch latitude and longitude from ip address
-        if (strpos($place, ",")) {
+        // var_dump("hello");
+        // var_dump($place);
+        // var_dump(strpos($place, ":"));
+        if (strpos($place, ",") != false) {
+            // var_dump("yes");
             $places = explode(",", $place);
             $lat = trim($places[0]);
             $long = trim($places[1]);
         } else {
+            // var_dump("no");
             $apiReq->setIp($place);
             $apiResult = $apiReq->getLocation();
             if ($apiResult["type"] == null) {
@@ -125,7 +131,12 @@ class RestWeatherController implements ContainerInjectableInterface
 
         $result = $apiReq->getWeather($lat, $long, $period);
 
-        $sum = $apiReq->getResult($info, $period, $result, $dates);
+        if ($period == "toCome") {
+            $sum = $apiReq->getResultToCome($info, $result);
+        } else {
+            $dates = $this->di->get("dates")->getPastDates(30);
+            $sum = $apiReq->getResultPast($info, $result, $dates);
+        }
 
         $data = [
             "res" => $result,
@@ -137,6 +148,81 @@ class RestWeatherController implements ContainerInjectableInterface
         ];
 
         $page->add("rest-weather/end", $data);
+
+        return $page->render([
+            "title" => $title,
+        ]);
+    }
+
+    /**
+     * Example output from weather forecast
+     *
+     * @return string
+     */
+    public function example1ActionGet(): object
+    {
+        // Add content as a view and then render the page.
+        $title = "Ex.1: Kolla väder";
+        $page = $this->di->get("page");
+        // $request = $this->di->get("request");
+
+        $result = "hello";
+        // Output from weather prognosis
+        $wOutput = require(ANAX_INSTALL_PATH . "/config/weather_example_all.php");
+        $sum = $wOutput["weather_all_to_come"];
+        $lat = "42.3601";
+        $long = "-71.0589";
+
+
+        $data = [
+            "res" => $result,
+            "sum" => json_encode($sum, JSON_PRETTY_PRINT) . "\n",
+            "lat" => $lat,
+            "long" => $long
+        ];
+
+        $page->add("check-weather/end", $data);
+
+        return $page->render([
+            "title" => $title,
+        ]);
+    }
+
+
+    /**
+     * Example output from weather forecast
+     *
+     * @return string
+     */
+    public function example2ActionGet(): object
+    {
+        // Add content as a view and then render the page.
+        $title = "Ex.2: Kolla väder";
+        $page = $this->di->get("page");
+        // $request = $this->di->get("request");
+
+        // Output from weather prognosis
+        // $wOutput = require(ANAX_INSTALL_PATH . "/config/weather_example_all.php");
+        // $sum = $wOutput["weather_all_to_come"];
+        $lat = "42.3601";
+        $long = "-71.0589";
+        // $period = "past";
+
+        // $apiReq = new CheckWeather();
+        // $sum = $apiReq->getWeather($lat, $long, $period);
+
+        // Output from weather prognosis
+        $wOutput = require(ANAX_INSTALL_PATH . "/config/weather_example_all.php");
+        $sum = $wOutput["weather_all_past"];
+
+        $data = [
+            "res" => $sum,
+            "sum" => json_encode($sum, JSON_PRETTY_PRINT) . "\n",
+            "lat" => $lat,
+            "long" => $long
+        ];
+
+        $page->add("check-weather/end", $data);
 
         return $page->render([
             "title" => $title,

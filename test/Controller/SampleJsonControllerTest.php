@@ -1,7 +1,9 @@
 <?php
 namespace Anax\Controller;
+
 use Anax\DI\DIFactoryConfig;
 use PHPUnit\Framework\TestCase;
+
 /**
  * Test the SampleController.
  */

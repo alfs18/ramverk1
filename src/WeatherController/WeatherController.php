@@ -122,7 +122,7 @@ class WeatherController implements ContainerInjectableInterface
         } else {
             $sum = "";
             $count = 0;
-            foreach($result as $res) {
+            foreach ($result as $res) {
                 $sum .= $dates[$count] . ": " . $res["hourly"]["summary"] . "<br>";
                 $count += 1;
             }

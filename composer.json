@@ -5,11 +5,16 @@
     "minimum-stability": "beta",
     "prefer-stable": true,
     "autoload": {
-        "psr-4": {"Anax\\": "src/"}
+        "psr-4": {
+            "Anax\\": "src/",
+            "Alfs18\\": "src/"
+        }
     },
     "require": {
         "anax/anax-ramverk1-me": "^1.0.0",
-        "alfs18/ramverk1-module": "^1.0"
+        "alfs18/ramverk1-module": "^1.0",
+        "anax/database-active-record": "^2.0",
+        "anax/htmlform": "^2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^7"

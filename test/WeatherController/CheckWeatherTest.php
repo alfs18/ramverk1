@@ -90,7 +90,7 @@ class CheckWeatherTest extends TestCase
         $controller = new CheckWeather();
         $result = $controller->getWeather("56.1619112", "13.7062347", "toCome");
         $dates = ["2019-12-10"];
-        $res = $controller->getResult("all", "toCome", $result, $dates);
+        $res = $controller->getResultToCome("all", $result, $dates);
 
         $this->assertIsArray($res);
     }
@@ -116,16 +116,20 @@ class CheckWeatherTest extends TestCase
     public function testGetResultToCome()
     {
         $controller = new CheckWeather();
-        $result = $controller->getWeather("56.1619112", "13.7062347", "toCome");
-        $dates = ["2019-12-10"];
+        // $result = $controller->getWeather("56.1619112", "13.7062347", "toCome");
 
-        $res = $controller->getResult("currently", "toCome", $result, $dates);
+        // Output from weather prognosis
+        $wOutput = require(ANAX_INSTALL_PATH . "/config/weather_example_all.php");
+        $result = $wOutput["weather_all_to_come"];
+        // $dates = ["2019-12-10"];
+
+        $res = $controller->getResultToCome("currently", $result);
         $this->assertIsArray($res);
 
-        $res = $controller->getResult("hourly", "toCome", $result, $dates);
+        $res = $controller->getResultToCome("hourly", $result);
         $this->assertIsArray($res);
 
-        $res = $controller->getResult("daily", "toCome", $result, $dates);
+        $res = $controller->getResultToCome("daily", $result);
         $this->assertIsArray($res);
     }
 

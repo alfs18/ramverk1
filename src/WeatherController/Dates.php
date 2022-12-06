@@ -11,7 +11,8 @@ class Dates
      *
      * @return array all the dates.
      */
-    public function getPastDates(int $days) {
+    public function getPastDates(int $days)
+    {
         $dates = [];
         for ($x = 1; $x <= $days; $x++) {
             $d=strtotime("-$x Days");

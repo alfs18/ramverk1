@@ -7024,5 +7024,20 @@ code {
   width: 80%;
 }
 /**
+ * Layout style for table.
+ */
+.book {
+  border: 1px solid #3b4a20;
+  padding: 0.5em;
+  width: 100%;
+}
+.first th {
+  border-bottom: 1px solid #3b4a20;
+  padding-bottom: 1em;
+}
+.book td {
+  text-align: center;
+}
+/**
  * My settings.
  */
